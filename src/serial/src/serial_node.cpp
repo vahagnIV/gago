@@ -14,9 +14,9 @@ bool execute(serial::setPins::Request &request, serial::setPins::Request &respon
 }
 
 int main(int argc, char *argv[]) {
-  std::cout << argv[argc - 1] << std::endl;
   serial::PinManager manager("/dev/ttyACM0");
-  if(!manager.Initialize())
+
+  if (!manager.Initialize())
     return 1;
   ros::init(argc, argv, "NativeSerialService");
   ros::NodeHandle n;

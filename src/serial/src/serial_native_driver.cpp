@@ -98,6 +98,9 @@ int SerialNativeDriver::Open() {
     return 1;
   }
 
+  char c;
+  while (ReadChar(c) == 0);
+
   return 0;
 }
 
@@ -109,16 +112,6 @@ void SerialNativeDriver::WriteData(const std::vector<uint8_t> &data) {
 int SerialNativeDriver::ReadChar(char &c) {
 
   return read(fd_, (char *) &c, 1) == 1 ? 0 : 1;
-}
-
-int SerialNativeDriver::Read(int &r) {
-
-  int n = 0;
-  do {
-    n += read(fd_, (char *) &r + n, sizeof(r) - n);
-  } while (n && n != sizeof(r));
-
-  return n ? 0 : -1;
 }
 
 void SerialNativeDriver::Close() {

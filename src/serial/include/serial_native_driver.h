@@ -26,7 +26,16 @@ class SerialNativeDriver {
     write(fd_, &data, sizeof(T));
   }
 
-  int Read(int &r);
+  template<typename T>
+  int Read(T &r) {
+    int n = 0;
+    do {
+      n += read(fd_, (char *) &r + n, sizeof(r) - n);
+    } while (n && n != sizeof(r));
+
+    return n ? 0 : -1;
+  }
+
   int ReadChar(char &c);
 
   virtual ~SerialNativeDriver();
