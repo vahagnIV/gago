@@ -8,21 +8,37 @@
 #include <ros/ros.h>
 #include "motor_control/Move.h"
 #include "motor_control/SetSpeed.h"
+#include <serial/setPins.h>
 
 namespace gago {
 
+struct MotorPinSet {
+  uint8_t enable_pin;
+  uint8_t control_pin1;
+  uint8_t control_pin2;
+};
+
 class MotorController {
  public:
-  MotorController(ros::NodeHandle &n);
+  MotorController(ros::ServiceClient &pin_client);
 
   bool Move(motor_control::Move::Request &request, motor_control::Move::Response &response);
   bool SetSpeed(motor_control::SetSpeed::Request &request, motor_control::SetSpeed::Response &response);
+  void SetLeftPinSet(MotorPinSet &left);
+  void SetRightPinSet(MotorPinSet &right);
 
-  void Initialize();
  private:
-  uint32_t CreateCommand(uint32_t pin, uint32_t command, uint32_t flags, uint32_t velocity);
+  static uint32_t CreateCommand(uint32_t pin, uint32_t command, uint32_t flags, uint32_t velocity);
+  void FillForwardCommands(const MotorPinSet &pin_set, serial::setPins::Request &request) const;
+  void FillBackwardCommands(const MotorPinSet &pin_set, serial::setPins::Request &request) const;
+
+ private:
+
   ros::ServiceClient pin_client_;
   uint8_t speed_;
+
+  MotorPinSet right_pin_set_;
+  MotorPinSet left_pin_set_;
 
 };
 

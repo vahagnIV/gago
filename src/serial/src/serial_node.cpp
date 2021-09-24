@@ -16,8 +16,10 @@ bool execute(serial::setPins::Request &request, serial::setPins::Request &respon
 int main(int argc, char *argv[]) {
   serial::PinManager manager("/dev/ttyACM0");
 
-  if (!manager.Initialize())
+  if (!manager.Initialize()){
+    ROS_ERROR("Could not initialize Arduino. Check if the device is properly connected.");
     return 1;
+  }
   ros::init(argc, argv, "NativeSerialService");
   ros::NodeHandle n;
   ros::ServiceServer service = n.advertiseService("set_pins", &serial::PinManager::Execute, &manager);
