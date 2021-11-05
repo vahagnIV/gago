@@ -10,13 +10,11 @@ MotorController::MotorController(ros::ServiceClient &pin_client) :
     pin_client_(pin_client), speed_(255) {
 
   // Defaults
-  right_pin_set_.enable_pin = 3;
-  right_pin_set_.control_pin1 = 4;
-  right_pin_set_.control_pin2 = 2;
+  right_pin_set_.pwn_pin = 3;
+  right_pin_set_.digital_pin = 2;
 
-  left_pin_set_.enable_pin = 5;
-  left_pin_set_.control_pin1 = 7;
-  left_pin_set_.control_pin2 = 8;
+  left_pin_set_.pwn_pin = 5;
+  left_pin_set_.digital_pin = 4;
 
 }
 
@@ -41,8 +39,10 @@ bool MotorController::Move(motor_control::Move::Request &request, motor_control:
     FillForwardCommands(left_pin_set_, request_commands);
     FillBackwardCommands(right_pin_set_, request_commands);
   } else if (request.direction == "STOP") {
-    request_commands.commands.push_back(CreateCommand(right_pin_set_.enable_pin, 1, 0, 0));
-    request_commands.commands.push_back(CreateCommand(left_pin_set_.enable_pin, 1, 0, 0));
+    request_commands.commands.push_back(CreateCommand(right_pin_set_.pwn_pin, 1, 1, 0));
+    request_commands.commands.push_back(CreateCommand(right_pin_set_.digital_pin, 1, 1, 0));
+    request_commands.commands.push_back(CreateCommand(left_pin_set_.pwn_pin, 1, 1, 0));
+    request_commands.commands.push_back(CreateCommand(left_pin_set_.digital_pin, 1, 1, 0));
   }
 
   // TODO: examine the response and log errors if necessary
@@ -51,16 +51,16 @@ bool MotorController::Move(motor_control::Move::Request &request, motor_control:
 }
 
 void MotorController::FillForwardCommands(const MotorPinSet &pin_set, serial::setPins::Request &request) const {
-  request.commands.push_back(CreateCommand(pin_set.control_pin1, 1, 1, 1));
-  request.commands.push_back(CreateCommand(pin_set.control_pin2, 1, 1, 0));
-  request.commands.push_back(CreateCommand(pin_set.enable_pin, 1, 0, speed_));
+//  request.commands.push_back(CreateCommand(pin_set.control_pin1, 1, 1, 1));
+  request.commands.push_back(CreateCommand(pin_set.digital_pin, 1, 1, 0));
+  request.commands.push_back(CreateCommand(pin_set.pwn_pin, 1, 0, speed_));
 
 }
 
 void MotorController::FillBackwardCommands(const MotorPinSet &pin_set, serial::setPins::Request &request) const {
-  request.commands.push_back(CreateCommand(pin_set.control_pin1, 1, 1, 0));
-  request.commands.push_back(CreateCommand(pin_set.control_pin2, 1, 1, 1));
-  request.commands.push_back(CreateCommand(pin_set.enable_pin, 1, 0, speed_));
+//  request.commands.push_back(CreateCommand(pin_set.control_pin1, 1, 1, 0));
+  request.commands.push_back(CreateCommand(pin_set.digital_pin, 1, 1, 1));
+  request.commands.push_back(CreateCommand(pin_set.pwn_pin, 1, 0, 255 - speed_));
 }
 
 void MotorController::SetLeftPinSet(MotorPinSet &left) {

@@ -13,9 +13,8 @@
 namespace gago {
 
 struct MotorPinSet {
-  uint8_t enable_pin;
-  uint8_t control_pin1;
-  uint8_t control_pin2;
+  uint8_t pwn_pin;
+  uint8_t digital_pin;
 };
 
 class MotorController {
