@@ -26,10 +26,10 @@ int main(int argc, char *argv[]) {
     gago::MotorPinSet left_pin_set;
     int tmp;
     n.getParam("/motor_control/left/enable", tmp);
-    left_pin_set.pwn_pin = tmp;
+    left_pin_set.fwd_pwn_pin = tmp;
 
     n.getParam("/motor_control/left/pin2", tmp);
-    left_pin_set.digital_pin = tmp;
+    left_pin_set.bcw_pwn_pin = tmp;
 
     controller.SetLeftPinSet(left_pin_set);
   }
@@ -39,10 +39,10 @@ int main(int argc, char *argv[]) {
     gago::MotorPinSet right_pin_set;
     int tmp;
     n.getParam("/motor_control/right/enable", tmp);
-    right_pin_set.pwn_pin = tmp;
+    right_pin_set.fwd_pwn_pin = tmp;
 
     n.getParam("/motor_control/right/pin2", tmp);
-    right_pin_set.digital_pin = tmp;
+    right_pin_set.bcw_pwn_pin = tmp;
 
     controller.SetRightPinSet(right_pin_set);
   }
