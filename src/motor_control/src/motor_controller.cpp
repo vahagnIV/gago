@@ -44,6 +44,10 @@ bool MotorController::Move(motor_control::Move::Request &request, motor_control:
     request_commands.commands.push_back(CreateCommand(left_pin_set_.fwd_pwn_pin, 1, 1, 0));
     request_commands.commands.push_back(CreateCommand(left_pin_set_.bcw_pwn_pin, 1, 1, 0));
   }
+  else
+  {
+    return false;
+  }
 
   // TODO: examine the response and log errors if necessary
   return pin_client_.call(request_commands, response_messages);
