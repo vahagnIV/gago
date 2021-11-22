@@ -20,8 +20,12 @@ int main(int argc, char ** argv) {
   while (nh.ok()) {
     if (!c.read(image))
       continue;
-    sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "mono8", image).toImageMsg();
+    cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
+    cv::Mat resized;
+    cv::resize(image, resized, cv::Size(320,240));
+    sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "mono8", resized).toImageMsg();
     pub.publish(msg);
+    ros::spinOnce();
     loop_rate.sleep();
   }
 }
