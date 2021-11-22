@@ -13,7 +13,7 @@ int main(int argc, char ** argv) {
   ros::NodeHandle nh;
   image_transport::ImageTransport it(nh);
   image_transport::Publisher pub = it.advertise("OrbImage", 1);
-  cv::VideoCapture c(0);
+  cv::VideoCapture c(0, cv::CAP_V4L2);
   cv::Mat image;
 
   ros::Rate loop_rate(60);
