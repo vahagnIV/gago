@@ -9,7 +9,7 @@
 #include <opencv2/opencv.hpp>
 
 int main(int argc, char ** argv) {
-  ros::init(argc, argv, "image_publisher");
+  ros::init(argc, argv, "ImagePublisherNode");
   ros::NodeHandle nh;
   image_transport::ImageTransport it(nh);
   image_transport::Publisher pub = it.advertise("OrbImage", 1);
